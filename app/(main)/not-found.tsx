@@ -1,30 +1,57 @@
+// app/not-found.tsx
 import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center px-4 py-12 sm:py-24 bg-black text-white font-sans antialiased">
-      <div className="text-center max-w-2xl mx-auto">
-        <h1 className="mb-6 font-display text-4xl sm:text-5xl text-primary">
+    <main className="relative flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden bg-black px-4 py-12 font-sans text-white antialiased sm:py-24">
+      {/* brilho de fundo, puramente decorativo */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--color-primary-muted),transparent_60%)]"
+      />
+
+      <div className="relative mx-auto max-w-xl text-center motion-safe:animate-fade-in-up">
+        <p className="mb-10 font-display text-2xl tracking-wide text-primary sm:text-3xl">
           Spotted
-        </h1>
-        <div className="w-24 h-24 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-primary/20">
-          <svg className="w-12 h-12 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </p>
+
+        <div
+          aria-hidden
+          className="mx-auto mb-8 flex size-24 items-center justify-center rounded-full border border-white/10 bg-white/5 shadow-2xl shadow-primary/20 backdrop-blur-xl"
+        >
+          <svg
+            className="size-11 text-primary"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="1.75"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+            />
           </svg>
         </div>
-        <h2 className="text-3xl font-bold mb-4">Cidade não encontrada</h2>
-        <p className="text-lg text-white/60 mb-8">
-          Não existe uma cidade cadastrada com este slug. Verifique o endereço ou acesse uma cidade disponível.
+
+  
+
+        <h1 className="mb-4 text-balance text-3xl font-bold sm:text-4xl">
+          Essa cidade não está no mapa
+        </h1>
+
+        <p className="mx-auto mb-10 max-w-md text-pretty text-lg leading-relaxed text-white/60">
+          Não encontramos nenhuma cidade com esse endereço. Confira se o link
+          está certo.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href="/" className="bg-primary rounded-xl px-6 py-3 text-white font-bold hover:bg-primary-hover transition-colors">
-            Voltar ao início
-          </Link>
-          <a href="http://localhost:3001" className="border border-white/10 rounded-xl px-6 py-3 text-white/60 hover:text-white hover:border-white transition-colors">
-            Painel Admin
-          </a>
-        </div>
+
+    
       </div>
-    </div>
+    </main>
   );
 }

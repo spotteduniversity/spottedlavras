@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, use } from "react";
 import { sendSpotted } from "@/lib/api";
 import fpPromise from "@fingerprintjs/fingerprintjs";
-
+import { notFound } from "next/navigation";
 const MAX_LENGTH = 350;
 
 export default function Home({ params }: { params: Promise<{ slug: string }> }) {
@@ -117,17 +117,9 @@ export default function Home({ params }: { params: Promise<{ slug: string }> }) 
     );
   }
 
-  if (!account) {
-    return (
-      <div className="flex min-h-screen w-full flex-col items-center justify-center px-4 py-12 sm:py-24 bg-black text-white font-sans antialiased">
-        <div className="text-center mb-10 max-w-2xl mx-auto">
-          <p className="text-lg text-white/60 leading-relaxed max-w-lg mx-auto">
-            Cidade não encontrada
-          </p>
-        </div>
-      </div>
-    );
-  }
+if (!account) {
+  notFound();
+}
 
   // Logo oficial da cidade; o template fica como fallback para contas antigas.
   const logoUrl = account.spotted_logo;
