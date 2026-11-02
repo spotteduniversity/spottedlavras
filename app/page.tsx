@@ -1,215 +1,202 @@
-// app/page.tsx (ou onde fica a Landing)
+// app/page.tsx
 import Link from "next/link";
-import type { ReactNode } from "react";
-
+import Image from "next/image";
 const CONTACT_EMAIL = "spottedlimeiraunicamp@gmail.com";
 const MAILTO = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-  "Quero anunciar no Spotted"
+  "Quero anunciar"
 )}`;
+
+// Altura de uma "tela" útil: viewport dinâmica (dvh) menos o header fixo.
+const screen = "min-h-[calc(100dvh-var(--header-h,4.5rem))]";
+const anchor = "scroll-mt-[var(--header-h,4.5rem)]";
 
 const focus =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary";
-const btnPrimary = `inline-flex h-14 items-center justify-center rounded-xl bg-primary px-8 text-lg font-bold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary-hover active:scale-[0.98] ${focus}`;
-const btnGhost = `inline-flex h-14 items-center justify-center rounded-xl border border-white/15 px-8 text-lg font-semibold text-white/80 transition hover:border-white/40 hover:text-white ${focus}`;
+const pill =
+  "inline-flex items-center justify-center rounded-full px-8 py-4 text-sm font-bold uppercase tracking-[0.06em] transition active:scale-[0.98]";
+const btnPrimary = `${pill} bg-primary text-primary-foreground hover:bg-primary-hover ${focus}`;
+const btnOutline = `${pill} border border-white/30 text-white hover:border-primary hover:text-primary ${focus}`;
+const footLink = `text-white/60 transition-colors hover:text-primary ${focus}`;
 
 const stats = [
-  { value: "10+", label: "cidades" },
-  { value: "2", label: "estados" },
-  { value: "2M+", label: "views pelo Brasil" },
-  { value: "50k+", label: "seguidores" },
+  { value: "+2M", label: "views" },
+  { value: "+3 mil", label: "spotteds" },
+  { value: "+500", label: "seguidores" },
 ];
 
-function Icon({ d }: { d: string }) {
+const cities = [
+  { name: "Lavras", handle: "lavras_spotted" },
+  { name: "Campinas", handle: "campinas_spotted" },
+  { name: "Limeira", handle: "limeira_spotted" },
+];
+
+function Arrow() {
   return (
     <svg
       aria-hidden
-      className="size-6 text-primary"
+      className="size-6 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
-      strokeWidth="1.75"
+      strokeWidth="2"
     >
-      <path strokeLinecap="round" strokeLinejoin="round" d={d} />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M8 7h9v9" />
     </svg>
   );
 }
 
-const benefits: { icon: ReactNode; title: string; text: string }[] = [
-  {
-    icon: (
-      <Icon d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-    ),
-    title: "Público universitário",
-    text: "Estudantes que acompanham o Spotted todos os dias, onde a conversa da faculdade acontece.",
-  },
-  {
-    icon: (
-      <Icon d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-    ),
-    title: "Alcance por cidade",
-    text: "Fale com quem está perto do seu negócio, em uma ou em várias das nossas cidades.",
-  },
-  {
-    icon: <Icon d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />,
-    title: "Dentro da conversa",
-    text: "Sua marca aparece no mesmo feed que os estudantes já acompanham, sem parecer um corpo estranho.",
-  },
-];
-
-const steps = [
-  { title: "Fale com a gente", text: "Conte sobre a sua marca e o seu objetivo." },
-  { title: "Montamos a campanha", text: "Definimos cidades, formato e período." },
-  { title: "Sua marca no ar", text: "Publicamos e acompanhamos a campanha com você." },
-];
-
 export default function Landing() {
   return (
-    <main className="min-h-dvh bg-surface font-sans text-white antialiased">
-      <header className="sticky top-0 z-50 border-b border-white/5 bg-surface/80 backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className={`font-display text-2xl text-primary ${focus}`}>
-            Spotted
-          </Link>
-          <nav className="flex items-center gap-6">
-            <a
-              href="#como-funciona"
-              className={`hidden text-sm text-white/60 transition hover:text-white sm:inline ${focus}`}
-            >
-              Como funciona
-            </a>
-            <a
-              href="#contato"
-              className={`rounded-xl bg-primary px-5 py-2 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary-hover ${focus}`}
-            >
-              Anuncie
-            </a>
-          </nav>
-        </div>
-      </header>
+    <main
+      id="topo"
+      className="min-h-dvh bg-surface font-sans tracking-[0.06em] text-white antialiased"
+    >
 
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--color-primary-muted),transparent_65%)]"
-        />
-        <div className="relative mx-auto w-full max-w-6xl px-6 pb-20 pt-14 sm:pb-28 sm:pt-24 motion-safe:animate-fade-in-up">
 
-          <h1 className="max-w-3xl text-balance font-display text-4xl leading-tight sm:text-6xl">
-            Anuncie sua <span className="text-primary">marca</span> para quem
-            vive a faculdade
+      {/* 1. HERO — uma tela exata */}
+      <section className={`${screen} snap-start flex flex-col px-6`}>
+        <div className="mx-auto my-auto w-full max-w-6xl py-12 motion-safe:animate-fade-in-up">
+          <h1 className="text-[clamp(3.5rem,14vw,10rem)] font-black uppercase leading-[0.85] tracking-tight">
+            <span className="block">Anuncie</span>
+            <span className="block">para quem</span>
+            <span className="block">vive a</span>
+            <span className="block text-primary">faculdade</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/60">
-            A forma mais direta de alcançar estudantes universitários no
-            Brasil, cidade por cidade.
+
+          <p className="mt-10 max-w-xl text-lg leading-relaxed text-white/60">
+            Os spotteds conectam sua marca onde <br></br>
+            os universitários já estão conversando.
           </p>
+
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <a href="#contato" className={btnPrimary}>
               Quero anunciar
             </a>
-            <a href="#como-funciona" className={btnGhost}>
-              Como funciona
+            <a href="#cidades" className={btnOutline}>
+              Ver cidades
             </a>
           </div>
         </div>
+
+
       </section>
 
-      {/* NÚMEROS */}
+      {/* 2. NÚMEROS — faixa verde ocupando a tela */}
       <section
-        aria-label="Números do Spotted"
-        className="border-y border-white/10 bg-white/[0.02]"
+        id="numeros"
+        aria-label="Números"
+        className={`${screen} ${anchor} snap-start bg-primary text-primary-foreground`}
       >
-        <dl className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-8 px-6 py-12 sm:grid-cols-4">
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col-reverse text-center">
-              <dt className="mt-2 text-sm text-white/60">{stat.label}</dt>
-              <dd className="font-display text-4xl text-primary sm:text-5xl">
-                {stat.value}
+        <dl
+          className={`mx-auto flex ${screen} w-full max-w-6xl flex-col divide-y divide-primary-foreground/20 px-6 sm:grid sm:grid-cols-3 sm:divide-x sm:divide-y-0`}
+        >
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className="flex flex-1 flex-col-reverse justify-center py-8 sm:px-8 sm:first:pl-0 sm:last:pr-0"
+            >
+              <dt className="mt-2 text-sm font-bold uppercase">{s.label}</dt>
+              <dd className="text-[clamp(3.5rem,10vw,7rem)] font-black leading-none tracking-tight">
+                {s.value}
               </dd>
             </div>
           ))}
         </dl>
       </section>
 
-      {/* POR QUE ANUNCIAR */}
-      <section className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-28">
-        <h2 className="max-w-2xl text-balance font-display text-3xl leading-tight sm:text-4xl">
-          Abrace o <span className="text-primary">público universitário</span>
-        </h2>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/60">
-          Os universitários estão no Spotted todos os dias. É onde a conversa
-          acontece, e onde a sua marca pode fazer parte dela.
-        </p>
-
-        <ul className="mt-12 grid gap-6 sm:grid-cols-3">
-          {benefits.map((b) => (
-            <li
-              key={b.title}
-              className="rounded-2xl border border-white/10 bg-surface-elevated p-6 transition hover:border-primary/40"
-            >
-              <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary-muted">
-                {b.icon}
-              </div>
-              <h3 className="mb-2 text-lg font-bold">{b.title}</h3>
-              <p className="leading-relaxed text-white/60">{b.text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* COMO FUNCIONA */}
+      {/* 3. CIDADES */}
       <section
-        id="como-funciona"
-        className="scroll-mt-24 border-y border-white/10 bg-white/[0.02]"
+        id="cidades"
+        className={`${screen} ${anchor} snap-start flex px-6`}
       >
-        <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-28">
-          <h2 className="font-display text-3xl sm:text-4xl">
-            Como <span className="text-primary">funciona</span>
+        <div className="mx-auto my-auto w-full max-w-6xl py-16">
+          <p className="mb-3 text-xs font-bold uppercase text-primary">Onde estamos</p>
+          <h2 className="mb-12 text-4xl font-black uppercase leading-[0.9] tracking-tight sm:text-6xl">
+            Hoje em 3 cidades
           </h2>
-          <ol className="mt-12 grid gap-8 sm:grid-cols-3">
-            {steps.map((s, i) => (
-              <li key={s.title} className="flex gap-4">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary font-display text-primary-foreground">
-                  {i + 1}
-                </span>
-                <div>
-                  <h3 className="mb-1 text-lg font-bold">{s.title}</h3>
-                  <p className="leading-relaxed text-white/60">{s.text}</p>
-                </div>
+
+          <ul className="grid gap-4 sm:grid-cols-3">
+            {cities.map((c) => (
+              <li key={c.handle}>
+                <a
+                  href={`https://instagram.com/${c.handle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group flex h-full min-h-48 flex-col justify-between rounded-lg border border-white/15 bg-surface-elevated p-6 transition-colors hover:border-primary sm:min-h-64 ${focus}`}
+                >
+                  <span className="flex justify-end text-white/40 transition-colors group-hover:text-primary">
+                    <Arrow />
+                  </span>
+                  <span>
+                    <span className="block text-4xl font-black uppercase leading-none tracking-tight">
+                      {c.name}
+                    </span>
+                    <span className="mt-2 block text-sm text-white/60">@{c.handle}</span>
+                  </span>
+                </a>
               </li>
             ))}
-          </ol>
+          </ul>
         </div>
       </section>
 
-      {/* CONTATO */}
+      {/* 4. CONTATO */}
       <section
         id="contato"
-        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20 sm:py-28"
+        className={`${screen} ${anchor} snap-start flex border-t border-white/10 px-6`}
       >
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-10 text-center shadow-2xl backdrop-blur-xl sm:p-16">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,var(--color-primary-muted),transparent_70%)]"
-          />
-          <div className="relative">
-            <h2 className="font-display text-3xl sm:text-4xl">
-              Vamos anunciar?
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-white/60">
-              Fale com a gente e monte uma campanha para a sua marca.
-            </p>
-            <a href={MAILTO} className={`mt-8 ${btnPrimary}`}>
-              Entrar em contato
-            </a>
-            <p className="mt-4 text-sm text-white/40">{CONTACT_EMAIL}</p>
-          </div>
+        <div className="mx-auto my-auto w-full max-w-6xl py-16 text-center">
+          <h2 className="text-[clamp(3rem,10vw,7rem)] font-black uppercase leading-[0.85] tracking-tight">
+            Vamos <span className="text-primary">anunciar?</span>
+          </h2>
+          <p className="mx-auto mt-6 max-w-md text-white/60">
+            Fale com a gente e monte uma campanha para a sua marca.
+          </p>
+          <a href={MAILTO} className={`${btnPrimary} mt-10`}>
+            Entrar em contato
+          </a>
+          <p className="mt-4 text-sm text-white/40">{CONTACT_EMAIL}</p>
         </div>
       </section>
 
-      <footer className="border-t border-white/10 py-8 text-center text-sm text-white/40">
-        © {new Date().getFullYear()} Spotted.
-      </footer>
+      {/* FOOTER */}
+  <footer className="snap-end border-t border-white/10 bg-surface">
+  <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-14 sm:flex-row sm:items-end sm:justify-between">
+    <Link href="/" aria-label="Página inicial" className={`block w-fit ${focus}`}>
+      <Image
+        src="/logo.png"
+        alt="Spotted"
+        width={240}
+        height={80}
+        className="h-16 w-auto sm:h-20"
+      />
+    </Link>
+
+    <nav aria-label="Instagram e contato">
+      <ul className="flex flex-wrap gap-x-8 gap-y-3 text-sm">
+        {cities.map((c) => (
+          <li key={c.handle}>
+            <a
+              href={`https://instagram.com/${c.handle}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={footLink}
+            >
+              @{c.handle}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href={MAILTO} className={footLink}>
+            {CONTACT_EMAIL}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+
+</footer>
     </main>
   );
 }
