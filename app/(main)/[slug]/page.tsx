@@ -57,44 +57,52 @@ export default function Home({ params }: { params: Promise<{ slug: string }> }) 
       .finally(() => setLoadingAccount(false));
   }, [slug]);
 
-  const doSubmit = async () => {
-    setIsSubmitting(true);
-    setErrorMsg(null);
-    try {
-      const fp = await fpPromise.load();
-      const result = await fp.get();
-      const visitorId = result.visitorId;
-
-      await sendSpotted({
-        message: message.trim(),
-        fingerprint: visitorId,
-        image: selectedImage || undefined,
-        slug,
-      });
-
-      setIsSuccess(true);
-      setMessage("");
-      removeImage();
-      setTimeout(() => setIsSuccess(false), 4000);
-    } catch (err: any) {
-      setErrorMsg(err.message || "Falha ao conectar com o servidor.");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const showSuccess = () => {
+    setIsSuccess(true);
+    setMessage("");
+    removeImage();
+    setTimeout(() => setIsSuccess(false), 4000);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const doSubmit = () => {
+    const payload = {
+      message: message.trim(),
+      image: selectedImage || undefined,
+      slug,
+    };
+
+    setIsSubmitting(true);
+    setErrorMsg(null);
+    showSuccess();
+
+    void (async () => {
+      try {
+        const fp = await fpPromise.load();
+        const result = await fp.get();
+
+        await sendSpotted({
+          ...payload,
+          fingerprint: result.visitorId,
+        });
+      } catch (err) {
+        console.error("Falha ao enviar o spotted:", err);
+      } finally {
+        setIsSubmitting(false);
+      }
+    })();
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (honeypot) {
-      setIsSuccess(true);
-      setTimeout(() => setIsSuccess(false), 4000);
+      showSuccess();
       return;
     }
 
     if (!message.trim()) return;
 
-    await doSubmit();
+    doSubmit();
   };
 
   if (loadingAccount) {
